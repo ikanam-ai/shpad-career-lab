@@ -70,7 +70,7 @@ def load_data():
         st.stop()
 
 # Загрузка данных
-df = load_data()
+df = fill_none_1(load_data())
 
 # --- БОКОВАЯ ПАНЕЛЬ (ФИЛЬТРЫ) ---
 def create_sidebar_filters():

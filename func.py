@@ -1,5 +1,6 @@
 import pandas as pd
 from typing import List, Dict, Tuple, Set, Optional
+
 def get_median(df, experience:str, schedule_type:List[str], employment_type:List[str], regions:List[str], roles:List[str], only_active : bool):
     # Применяем фильтры
     if only_active:
@@ -45,5 +46,24 @@ def remove_salary_outliers(df):
         ]
     
     return filter_group(df_clean)
+
+
+def fill_none_1(df):
+    df['region_district_name'] = df['region_district_name'].fillna('Не указан')
+    df['soft_skills'] = df['soft_skills'].fillna('Не указаны')
+    df['experience_category'] = df['experience_category'].fillna('Не указан')
+    for column in df.columns:
+        numeric_columns = df.select_dtypes(include=['int64', 'float64']).columns
+        for col in numeric_columns:
+            if df[col].isnull().sum() > 0:
+                df[col] = df[col].fillna(df[col].median())
+
+    categorical_columns = df.select_dtypes(include=['object']).columns
+    for col in categorical_columns:
+        if df[col].isnull().sum() > 0:
+            mode_value = df[col].mode()[0]
+            df[col] = df[col].fillna(mode_value)
+    
+    return df
 
                
